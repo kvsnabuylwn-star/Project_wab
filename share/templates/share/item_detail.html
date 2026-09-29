@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ item.title }} - CS Dept Next{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto pb-8 space-y-6">
+
+    <!-- Back link -->
+    <a href="{% url 'item_list' %}" class="inline-flex items-center text-xs text-gray-400 hover:text-gray-600 transition">
+        <i class="fa-solid fa-arrow-left mr-1.5 text-[10px]"></i>กลับหน้ารายการ
+    </a>
+
+    <!-- Unified Item Detail Card -->
+    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+        <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-200">
+            <h2 class="text-sm font-semibold text-gray-700">ข้อมูลสิ่งของ</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+
+            <!-- รูปภาพ (ซ้าย) -->
+            <div class="p-5 flex flex-col justify-start">
+                {% if item.image %}
+                    <div class="aspect-[4/3] rounded-lg overflow-hidden bg-gray-100 border border-gray-100">
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+                    </div>
+                {% else %}
+                    <div class="aspect-[4/3] rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
+                        <div class="text-center text-gray-300">
+                            <i class="fa-solid fa-box-open text-5xl mb-2"></i>
+                            <p class="text-xs text-gray-400">ไม่มีรูปภาพ</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- ข้อมูล (ขวา) -->
+            <div class="p-5 flex flex-col justify-between">
+                <div>
+                    <!-- ชื่อ -->
+                    <h1 class="text-2xl font-bold text-gray-800 leading-tight mb-3">{{ item.title }}</h1>
+
+                    <!-- ราคา -->
+                    <div class="flex items-center gap-3 mb-5">
+                        {% if item.is_free %}
+                            <span class="text-xl font-bold text-green-600">ฟรี</span>
+                        {% else %}
+                            <span class="text-xl font-bold text-gray-800">฿{{ item.price }}</span>
+                        {% endif %}
+
+                        {% if item.status == 'available' %}
+                            <span class="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-md border border-green-200">พร้อมส่งต่อ</span>
+                        {% elif item.status == 'reserved' %}
+                            <span class="text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-md border border-yellow-200">มีคนขอรับแล้ว</span>
+                        {% else %}
+                            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-md border border-gray-200">ส่งมอบแล้ว</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- รายละเอียด -->
+                    <div class="mb-5">
+                        <h3 class="text-xs text-gray-400 mb-1.5 uppercase tracking-wide font-medium">รายละเอียด</h3>
+                        <p class="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{{ item.description }}</p>
+                    </div>
+
+                    <!-- เส้นคั่น -->
+                    <div class="border-t border-gray-100 my-1"></div>
+
+                    <!-- ผู้ลงประกาศ -->
+                    <div class="py-4">
+                        <h3 class="text-xs text-gray-400 mb-2.5 uppercase tracking-wide font-medium">ผู้ลงประกาศ</h3>
+                        <div class="flex items-center gap-3">
+                            {% if item.owner.profile.avatar %}
+                                <img src="{{ item.owner.profile.avatar.url }}" alt="{{ item.owner.username }}" class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                            {% else %}
+                                <div class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-600">
+                                    {{ item.owner.first_name|default:item.owner.username|make_list|first|upper }}
+                                </div>
+                            {% endif %}
+                            <div>
+                                <p class="text-sm font-semibold text-gray-800 flex items-center flex-wrap gap-1.5">
+                                    <span>{{ item.owner.first_name|default:item.owner.username }} {{ item.owner.last_name }}</span>
+                                    {% if item.owner.profile.year_level %}
+                                        <span class="inline-flex items-center text-xs font-normal text-gray-400">
+                                            <i class="fa-solid fa-graduation-cap text-[11px] mr-1 text-blue-500"></i>ปี {{ item.owner.profile.year_level }}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                                <p class="text-xs text-gray-400">{{ item.owner.email|default:"" }}</p>
+                            </div>
+                        </div>
+
+                        {% if item.contact_info %}
+                            <div class="mt-3.5">
+                                <a href="{{ item.contact_info.url }}" target="_blank" rel="noopener noreferrer"
+                                   class="flex items-center justify-between p-3 rounded-xl border {{ item.contact_info.card_border }} transition hover:shadow-sm group">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <div class="w-9 h-9 rounded-lg {{ item.contact_info.icon_bg }} flex items-center justify-center text-lg flex-shrink-0">
+                                            <i class="{{ item.contact_info.icon }}"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-xs font-bold text-gray-800 group-hover:text-blue-600 transition">{{ item.contact_info.name }}</span>
+                                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white border border-gray-200 text-gray-600">{{ item.contact_info.badge }}</span>
+                                            </div>
+                                            <p class="text-xs text-gray-500 truncate max-w-[220px] mt-0.5">{{ item.contact_info.display_text }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 text-xs text-blue-600 font-medium ml-2 flex-shrink-0 group-hover:translate-x-0.5 transition-transform">
+                                        <span>เปิดลิงก์</span>
+                                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-[11px] text-gray-400 mb-5">
+                        ลงประกาศ {{ item.created_at|date:"d M Y, H:i" }}
+                    </p>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-auto">
+                    {% if user.is_authenticated %}
+                        {% if user == item.owner or user.is_staff %}
+                            {% if user != item.owner %}
+                                <p class="text-xs text-purple-500 mb-2">
+                                    <i class="fa-solid fa-shield-halved mr-1"></i>จัดการในฐานะ Admin
+                                </p>
+                            {% endif %}
+                            <div class="flex gap-2">
+                                <a href="{% url 'item_edit' pk=item.pk %}"
+                                   class="flex-1 text-center py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                                    <i class="fa-solid fa-pen mr-1.5 text-xs"></i>แก้ไข
+                                </a>
+                                <a href="{% url 'item_delete' pk=item.pk %}"
+                                   class="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
+                                    <i class="fa-solid fa-trash mr-1 text-xs"></i>ลบ
+                                </a>
+                            </div>
+                        {% else %}
+                            {% if user_claim %}
+                                <div class="bg-gray-50 rounded-xl p-4 text-sm space-y-1.5 border border-gray-200">
+                                    <p class="font-medium text-gray-700">คุณส่งคำขอนัดรับแล้ว</p>
+                                    {% if user_claim.pickup_place %}<p class="text-xs text-gray-500">จุดนัดรับ: {{ user_claim.pickup_place }}</p>{% endif %}
+                                    <p class="text-xs text-gray-500">วันที่: {{ user_claim.meetup_date|date:"d M Y" }}</p>
+                                    <p class="text-xs">
+                                        {% if user_claim.is_confirmed %}
+                                            <span class="text-green-600 font-medium">เจ้าของยืนยันส่งมอบแล้ว ✓</span>
+                                        {% else %}
+                                            <span class="text-yellow-500">รอเจ้าของยืนยัน</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            {% elif item.status == 'completed' %}
+                                <div class="text-center py-3 text-sm text-gray-400">
+                                    ของชิ้นนี้ส่งมอบไปแล้ว
+                                </div>
+                            {% else %}
+                                <a href="{% url 'claim_create' item_id=item.pk %}"
+                                   class="w-full block text-center py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold rounded-lg transition active:scale-[0.98]">
+                                    ขอนัดรับของชิ้นนี้
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-xs text-gray-400 mb-2">เข้าสู่ระบบเพื่อขอนัดรับ</p>
+                            <a href="{% url 'login' %}?next={{ request.path }}"
+                               class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition">
+                                เข้าสู่ระบบ
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div><!-- end ข้อมูล -->
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- ส่วนความคิดเห็นและการตอบกลับ -->
+    <!-- ========================================== -->
+    <div class="pt-6 border-t border-gray-200 space-y-5">
+        
+        <!-- Comment Header -->
+        <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold text-gray-800 flex items-center">
+                <i class="fa-regular fa-comments text-blue-500 mr-2"></i>
+                ความคิดเห็นและสอบถาม 
+                <span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                    {{ total_comments_count }}
+                </span>
+            </h2>
+        </div>
+
+        <!-- New Comment Form -->
+        {% if user.is_authenticated %}
+            <form action="{% url 'comment_create' item_id=item.pk %}" method="POST" class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                {% csrf_token %}
+                <div class="flex gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-50 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center text-xs font-bold text-blue-500">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="w-full h-full object-cover">
+                        {% else %}
+                            {{ user.first_name|default:user.username|make_list|first|upper }}
+                        {% endif %}
+                    </div>
+                    <div class="flex-1 min-w-0 space-y-2.5">
+                        <textarea name="content" rows="2" required placeholder="สอบถามข้อมูลเพิ่มเติม หรือพิมพ์ข้อความพูดคุยกับผู้ลงประกาศ..." class="w-full px-3.5 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"></textarea>
+                        <div class="flex justify-end">
+                            <button type="submit" class="px-4 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium transition active:scale-95 flex items-center">
+                                <i class="fa-regular fa-paper-plane mr-1.5"></i>ส่งความคิดเห็น
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl text-center">
+                <p class="text-xs text-gray-500">
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="text-blue-500 font-medium hover:underline">เข้าสู่ระบบ</a> เพื่อแสดงความคิดเห็นหรือสอบถามผู้ลงประกาศ
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- Comments List -->
+        <div class="space-y-3.5">
+            {% for comment in comments %}
+                <div id="comment-{{ comment.pk }}" class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                    
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center text-xs font-bold text-gray-500">
+                            {% if comment.author.profile.avatar %}
+                                <img src="{{ comment.author.profile.avatar.url }}" alt="{{ comment.author.username }}" class="w-full h-full object-cover">
+                            {% else %}
+                                {{ comment.author.first_name|default:comment.author.username|make_list|first|upper }}
+                            {% endif %}
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="text-xs font-semibold text-gray-800">
+                                        {{ comment.author.first_name|default:comment.author.username }} {{ comment.author.last_name }}
+                                    </span>
+                                    {% if comment.author == item.owner %}
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 border border-blue-200 font-medium">
+                                            ผู้ลงประกาศ
+                                        </span>
+                                    {% endif %}
+                                    {% if comment.author.profile.year_level %}
+                                        <span class="text-[10px] text-gray-400">
+                                            · ปี {{ comment.author.profile.year_level }}
+                                        </span>
+                                    {% endif %}
+                                    <span class="text-[10px] text-gray-400">
+                                        · {{ comment.created_at|date:"d M Y, H:i" }}
+                                    </span>
+                                </div>
+
+                                {% if user.is_authenticated and user == comment.author or user == item.owner or user.is_staff %}
+                                    <form action="{% url 'comment_delete' pk=comment.pk %}" method="POST" onsubmit="return confirm('ต้องการลบความคิดเห็นนี้ใช่หรือไม่?');" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="text-gray-400 hover:text-red-500 text-xs transition p-1" title="ลบความคิดเห็น">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+
+                            <p class="text-xs sm:text-sm text-gray-600 mt-1 leading-relaxed whitespace-pre-line break-words">
+                                {{ comment.content }}
+                            </p>
+
+                            {% if user.is_authenticated %}
+                                <div class="mt-2">
+                                    <button type="button" onclick="toggleReplyBox('reply-box-{{ comment.pk }}')" class="text-xs font-medium text-blue-500 hover:underline flex items-center">
+                                        <i class="fa-solid fa-reply mr-1 text-[10px]"></i>ตอบกลับ
+                                    </button>
+                                </div>
+
+                                <div id="reply-box-{{ comment.pk }}" class="hidden mt-3 pt-3 border-t border-gray-100">
+                                    <form action="{% url 'comment_create' item_id=item.pk %}" method="POST" class="flex gap-2.5 items-start">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="parent_id" value="{{ comment.pk }}">
+                                        <textarea name="content" rows="1" required placeholder="ตอบกลับความคิดเห็นของ {{ comment.author.first_name|default:comment.author.username }}..." class="flex-1 px-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                                        <button type="submit" class="px-3 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium transition active:scale-95">
+                                            ตอบ
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Nested Replies -->
+                    {% if comment.replies.all %}
+                        <div class="mt-3 pl-4 sm:pl-6 space-y-2.5 border-l-2 border-gray-100 ml-4">
+                            {% for reply in comment.replies.all %}
+                                <div id="comment-{{ reply.pk }}" class="pt-1.5">
+                                    <div class="flex items-start gap-2.5">
+                                        <div class="w-6 h-6 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                                            {% if reply.author.profile.avatar %}
+                                                <img src="{{ reply.author.profile.avatar.url }}" alt="{{ reply.author.username }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                                {{ reply.author.first_name|default:reply.author.username|make_list|first|upper }}
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex flex-wrap items-center gap-1.5">
+                                                    <span class="text-xs font-semibold text-gray-800">
+                                                        {{ reply.author.first_name|default:reply.author.username }} {{ reply.author.last_name }}
+                                                    </span>
+                                                    {% if reply.author == item.owner %}
+                                                        <span class="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-blue-500 border border-blue-200 font-medium">
+                                                            ผู้ลงประกาศ
+                                                        </span>
+                                                    {% endif %}
+                                                    <span class="text-[10px] text-gray-400">
+                                                        · {{ reply.created_at|date:"d M Y, H:i" }}
+                                                    </span>
+                                                </div>
+
+                                                {% if user.is_authenticated and user == reply.author or user == item.owner or user.is_staff %}
+                                                    <form action="{% url 'comment_delete' pk=reply.pk %}" method="POST" onsubmit="return confirm('ต้องการลบการตอบกลับนี้ใช่หรือไม่?');" class="inline">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="text-gray-400 hover:text-red-500 text-xs transition p-0.5" title="ลบการตอบกลับ">
+                                                            <i class="fa-regular fa-trash-can"></i>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            </div>
+
+                                            <p class="text-xs text-gray-600 mt-0.5 leading-relaxed whitespace-pre-line break-words">
+                                                {{ reply.content }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% empty %}
+                <div class="py-8 text-center text-gray-400">
+                    <i class="fa-regular fa-message text-2xl mb-1.5 opacity-60"></i>
+                    <p class="text-xs">ยังไม่มีความคิดเห็นในรายการนี้</p>
+                    <p class="text-[11px] text-gray-400 mt-0.5">เป็นคนแรกที่เริ่มสอบถามหรือแสดงความคิดเห็น!</p>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function toggleReplyBox(id) {
+    const box = document.getElementById(id);
+    if (box) {
+        box.classList.toggle('hidden');
+        if (!box.classList.contains('hidden')) {
+            const textarea = box.querySelector('textarea');
+            if (textarea) textarea.focus();
+        }
+    }
+}
+</script>
+{% endblock %}

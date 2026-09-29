@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block title %}ข้อมูลส่วนตัว: {{ user.first_name|default:user.username }} - CS Dept Next{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- 1. Profile Summary Card -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <!-- Avatar -->
+            <div class="relative flex-shrink-0">
+                <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-xl bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
+                    {% if profile.avatar %}
+                        <img id="header-avatar-img" src="{{ profile.avatar.url }}" alt="{{ user.username }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="w-full h-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-2xl">
+                            {{ user.first_name|default:user.username|make_list|first|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Info Details -->
+            <div class="flex-1 min-w-0 space-y-2">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                        <i class="fa-solid fa-graduation-cap mr-1.5 text-blue-500"></i>ชั้นปีที่ {{ profile.year_level }}
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-600 border border-gray-200 font-mono">
+                        <i class="fa-solid fa-id-card mr-1.5 text-gray-400"></i>{{ profile.student_id|default:user.username }}
+                    </span>
+                    {% if user.is_staff %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-yellow-50 text-yellow-600 border border-yellow-200">
+                            <i class="fa-solid fa-shield-halved mr-1.5"></i>ผู้ดูแลระบบ
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-800">
+                        {{ user.first_name }} {{ user.last_name }} 
+                        <span class="text-sm font-normal text-gray-400">(@{{ user.username }})</span>
+                    </h1>
+                </div>
+
+                <p class="text-xs sm:text-sm text-gray-400 font-light leading-relaxed">
+                    {{ profile.bio|default:"ยังไม่ได้ระบุคำแนะนำตัว สามารถแก้ไขด้านล่างเพื่อเพิ่มคำแนะนำตัวได้" }}
+                </p>
+
+                <div class="flex flex-wrap items-center gap-y-1 gap-x-4 pt-1 text-xs text-gray-400">
+                    <span class="flex items-center"><i class="fa-regular fa-envelope mr-1.5 text-gray-400"></i>{{ user.email }}</span>
+                    {% if profile.phone_number %}
+                        <span class="flex items-center"><i class="fa-solid fa-phone mr-1.5 text-gray-400"></i>{{ profile.phone_number }}</span>
+                    {% endif %}
+                    {% if profile.line_id %}
+                        <span class="flex items-center"><i class="fa-brands fa-line mr-1.5 text-green-500"></i>Line: {{ profile.line_id }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Inline Quick Stats -->
+        <div class="mt-5 pt-4 border-t border-gray-100 grid grid-cols-3 gap-3 text-center sm:text-left">
+            <div>
+                <span class="text-xs text-gray-400 block">ของที่ลงประกาศ</span>
+                <span class="text-base font-bold text-gray-800">{{ my_items_count }}</span>
+                <span class="text-xs text-gray-400"> รายการ</span>
+            </div>
+            <div>
+                <span class="text-xs text-gray-400 block">ส่งมอบสำเร็จ</span>
+                <span class="text-base font-bold text-green-600">{{ completed_items_count }}</span>
+                <span class="text-xs text-gray-400"> ชิ้น</span>
+            </div>
+            <div>
+                <span class="text-xs text-gray-400 block">คำขอรับของ</span>
+                <span class="text-base font-bold text-gray-800">{{ my_claims_count }}</span>
+                <span class="text-xs text-gray-400"> รายการ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Edit Profile Form -->
+    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+        <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-200">
+            <h2 class="text-sm font-semibold text-gray-700 flex items-center">
+                <i class="fa-solid fa-user-pen text-blue-500 mr-2"></i>
+                แก้ไขข้อมูลส่วนตัว
+            </h2>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="p-5 sm:p-6 space-y-5">
+            {% csrf_token %}
+
+            {% if user_form.errors or profile_form.errors %}
+                <div class="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 space-y-1">
+                    <p class="font-bold">กรุณาตรวจสอบข้อผิดพลาดด้านล่าง:</p>
+                    {{ user_form.errors }}
+                    {{ profile_form.errors }}
+                </div>
+            {% endif %}
+
+            <!-- Row 1: First Name & Last Name -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="{{ user_form.first_name.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        ชื่อจริง <span class="text-red-400">*</span>
+                    </label>
+                    {{ user_form.first_name }}
+                </div>
+                <div>
+                    <label for="{{ user_form.last_name.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        นามสกุล <span class="text-red-400">*</span>
+                    </label>
+                    {{ user_form.last_name }}
+                </div>
+            </div>
+
+            <!-- Row 2: Email & Student ID -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="{{ user_form.email.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        อีเมล <span class="text-red-400">*</span>
+                    </label>
+                    {{ user_form.email }}
+                </div>
+                <div>
+                    <label for="{{ profile_form.student_id.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        รหัสนักศึกษา
+                    </label>
+                    {{ profile_form.student_id }}
+                </div>
+            </div>
+
+            <!-- Row 3: Year Level, Phone Number, Line ID -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label for="{{ profile_form.year_level.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        ชั้นปีปัจจุบัน <span class="text-red-400">*</span>
+                    </label>
+                    {{ profile_form.year_level }}
+                </div>
+                <div>
+                    <label for="{{ profile_form.phone_number.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        เบอร์โทรศัพท์ติดต่อ
+                    </label>
+                    {{ profile_form.phone_number }}
+                </div>
+                <div>
+                    <label for="{{ profile_form.line_id.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        Line ID
+                    </label>
+                    {{ profile_form.line_id }}
+                </div>
+            </div>
+
+            <!-- Row 4: Bio -->
+            <div>
+                <label for="{{ profile_form.bio.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                    คำแนะนำตัวสั้นๆ (Bio)
+                </label>
+                {{ profile_form.bio }}
+            </div>
+
+            <!-- Row 5: Avatar Upload with Instant JS Preview -->
+            <div>
+                <label for="{{ profile_form.avatar.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                    เปลี่ยนรูปโปรไฟล์
+                </label>
+                <div class="flex items-center space-x-4">
+                    <div id="avatar-preview-container" class="w-14 h-14 rounded-xl bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center text-gray-400">
+                        {% if profile.avatar %}
+                            <img id="avatar-preview-img" src="{{ profile.avatar.url }}" alt="Preview" class="w-full h-full object-cover">
+                        {% else %}
+                            <i id="avatar-preview-placeholder" class="fa-solid fa-user text-xl"></i>
+                            <img id="avatar-preview-img" src="" alt="Preview" class="w-full h-full object-cover hidden">
+                        {% endif %}
+                    </div>
+                    <div class="flex-1">
+                        {{ profile_form.avatar }}
+                        <p class="text-[11px] text-gray-400 mt-1">รองรับไฟล์ JPG, PNG, WEBP (สัดส่วน 1:1 จะพอดีที่สุด)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
+                <a href="{% url 'password_change' %}" class="inline-flex items-center px-3.5 py-2 rounded-lg border border-gray-200 hover:border-blue-300 text-gray-600 hover:text-blue-500 bg-gray-50 text-xs font-medium transition">
+                    <i class="fa-solid fa-key mr-1.5 text-gray-400"></i>เปลี่ยนรหัสผ่าน
+                </a>
+                <div class="flex items-center space-x-2.5">
+                    <a href="{% url 'item_list' %}" class="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition">
+                        ยกเลิก
+                    </a>
+                    <button type="submit" class="px-5 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium transition active:scale-95">
+                        <i class="fa-solid fa-check mr-1.5"></i>บันทึกข้อมูล
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!-- JS Image Preview -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const avatarInput = document.getElementById('{{ profile_form.avatar.id_for_label }}');
+    const previewImg = document.getElementById('avatar-preview-img');
+    const placeholder = document.getElementById('avatar-preview-placeholder');
+
+    if (avatarInput && previewImg) {
+        avatarInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.classList.remove('hidden');
+                    if (placeholder) placeholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

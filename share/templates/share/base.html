@@ -1,0 +1,351 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ICT UBU: Information and Communications Technology{% endblock %}</title>
+    
+    <!-- Google Fonts: Kanit (Full Site) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Kanit"', 'system-ui', 'sans-serif'],
+                        heading: ['"Kanit"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* =========================================================
+           CLEAN LIGHT THEME - Soft Gray Background + White Cards + Blue Accent
+           ========================================================= */
+        :root {
+            --brand-primary: #3b82f6;
+            --brand-hover: #2563eb;
+            --brand-active: #1d4ed8;
+            --brand-light: #eff6ff;
+            --brand-ring: rgba(59, 130, 246, 0.3);
+            --page-bg: #e5e7eb;
+            --card-surface: #ffffff;
+            --card-subsurface: #f9fafb;
+            --card-border: #e5e7eb;
+            --header-bg: #ffffff;
+            --header-border: #e5e7eb;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Kanit', system-ui, -apple-system, sans-serif;
+            background-color: var(--page-bg) !important;
+            color: var(--text-main) !important;
+            margin: 0;
+        }
+
+        input, button, select, textarea, optgroup {
+            font-family: 'Kanit', system-ui, -apple-system, sans-serif;
+        }
+
+        /* Protect Font Awesome icons so they never turn into boxes */
+        .fa, .fas, .far, .fal, .fad,
+        .fa-solid, .fa-regular,
+        [class*="fa-"], [class^="fa-"] {
+            font-family: "Font Awesome 6 Free" !important;
+        }
+
+        .fab, .fa-brands, [class*="fa-brands"] {
+            font-family: "Font Awesome 6 Brands" !important;
+        }
+
+        /* Override any Tailwind dark mode classes */
+        .dark .bg-slate-900,
+        .dark .bg-zinc-900,
+        .dark .bg-\\[\\#18191c\\] {
+            background-color: var(--card-surface) !important;
+        }
+
+        /* Card surfaces */
+        .bg-white {
+            background-color: var(--card-surface) !important;
+        }
+
+        /* Input fields - unstyled Django form defaults (zero specificity so Tailwind classes always win) */
+        :where(input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="date"], select, textarea) {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            border-radius: 0.5rem;
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            width: 100%;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        :where(input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="date"], select, textarea):focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 2px var(--brand-ring);
+            outline: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        /* Nav link active */
+        .nav-link-active {
+            color: var(--brand-primary) !important;
+            font-weight: 600;
+            border-bottom: 2px solid var(--brand-primary);
+        }
+
+        /* Button primary */
+        .btn-primary {
+            background-color: var(--brand-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .btn-primary:hover {
+            background-color: var(--brand-hover);
+        }
+
+        /* Status badges */
+        .badge-blue { background-color: #3b82f6; color: white; }
+        .badge-yellow { background-color: #eab308; color: white; }
+        .badge-red { background-color: #ef4444; color: white; }
+        .badge-green { background-color: #22c55e; color: white; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="antialiased min-h-screen">
+
+    <div class="min-h-screen">
+
+        <!-- TOP HEADER BAR (Clean White) -->
+        <header class="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+                
+                <!-- Logo / Brand -->
+                <a href="{% url 'item_list' %}" class="flex items-center space-x-2.5 hover:opacity-80 transition">
+                    <img src="{% static 'images/logo_ict_ubu.png' %}" alt="ICT UBU Logo" class="w-9 h-9 object-contain rounded-lg flex-shrink-0">
+                    <div>
+                        <h1 class="text-sm font-bold text-gray-800 leading-tight">ICT UBU</h1>
+                        <p class="text-[10px] text-gray-400 leading-tight">Information and Communications Technology</p>
+                    </div>
+                </a>
+
+                <!-- Center Nav Links -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <a href="{% url 'item_list' %}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {% if request.resolver_match.url_name == 'item_list' and not request.GET.q %}text-blue-600 bg-blue-50{% else %}text-gray-600 hover:text-blue-600 hover:bg-gray-50{% endif %}">
+                        <i class="fa-solid fa-house mr-1.5 text-xs"></i>หน้าแรก
+                    </a>
+                    <a href="{% url 'item_create' %}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {% if request.resolver_match.url_name == 'item_create' %}text-blue-600 bg-blue-50{% else %}text-gray-600 hover:text-blue-600 hover:bg-gray-50{% endif %}">
+                        <i class="fa-solid fa-circle-plus mr-1.5 text-xs"></i>ลงประกาศ
+                    </a>
+                    <a href="{% url 'my_requests' %}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {% if request.resolver_match.url_name == 'my_requests' or request.resolver_match.url_name == 'my_items' %}text-blue-600 bg-blue-50{% else %}text-gray-600 hover:text-blue-600 hover:bg-gray-50{% endif %}">
+                        <i class="fa-solid fa-handshake mr-1.5 text-xs"></i>นัดรับของ
+                    </a>
+                    {% if user.is_authenticated and user.is_staff %}
+                    <a href="{% url 'dashboard' %}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {% if request.resolver_match.url_name == 'dashboard' %}text-blue-600 bg-blue-50{% else %}text-gray-600 hover:text-blue-600 hover:bg-gray-50{% endif %}">
+                        <i class="fa-solid fa-chart-pie mr-1.5 text-xs"></i>สถิติ
+                    </a>
+                    {% endif %}
+                </nav>
+
+                <!-- Right Section -->
+                <div class="flex items-center space-x-2">
+
+                    <!-- Notification Bell -->
+                    <div class="relative" id="notification-dropdown-container">
+                        <button type="button" id="notification-bell-btn" class="relative p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-blue-500 transition focus:outline-none" title="การแจ้งเตือน">
+                            <i class="fa-regular fa-bell text-sm"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span id="notification-badge" class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+                            {% else %}
+                                <span id="notification-badge" class="hidden absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
+                            {% endif %}
+                        </button>
+                        <!-- Notification Panel -->
+                        <div id="notification-panel" class="hidden absolute right-0 mt-1 w-72 bg-white text-gray-800 rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+                            <div class="px-3.5 py-2.5 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+                                <h4 class="text-xs font-semibold text-gray-700">การแจ้งเตือน</h4>
+                                {% if unread_notifications_count > 0 %}
+                                    <button id="mark-all-read-btn" type="button" class="text-[11px] text-blue-500 hover:underline">อ่านทั้งหมด</button>
+                                {% endif %}
+                            </div>
+                            <div class="max-h-64 overflow-y-auto divide-y divide-gray-100" id="notification-items-list">
+                                {% if notifications_list %}
+                                    {% for notif in notifications_list %}
+                                        <a href="{% url 'mark_notification_read' pk=notif.pk %}" class="flex items-start space-x-2.5 px-3.5 py-2.5 hover:bg-gray-50 transition {% if not notif.is_read %}bg-blue-50/40{% endif %}">
+                                            <div class="mt-0.5 w-3.5 flex-shrink-0 text-center">
+                                                {% if notif.notification_type == 'claim_confirmed' %}
+                                                    <i class="fa-solid fa-circle-check text-green-500 text-xs"></i>
+                                                {% elif notif.notification_type == 'comment_new' or notif.notification_type == 'reply_new' %}
+                                                    <i class="fa-regular fa-comment-dots text-blue-500 text-xs"></i>
+                                                {% else %}
+                                                    <i class="fa-solid fa-handshake text-blue-500 text-xs"></i>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-xs font-medium text-gray-800 truncate">{{ notif.title }}</p>
+                                                <p class="text-[11px] text-gray-500 mt-0.5 line-clamp-2">{{ notif.message }}</p>
+                                                <span class="text-[10px] text-gray-400 mt-0.5 block">{{ notif.created_at|timesince }}ที่แล้ว</span>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="py-5 px-3 text-center">
+                                        <i class="fa-regular fa-bell-slash text-gray-400 text-xl mb-1.5 block"></i>
+                                        <p class="text-xs text-gray-400">ไม่มีการแจ้งเตือน</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="px-3 py-2 border-t border-gray-100 bg-gray-50">
+                                <a href="{% url 'my_requests' %}" class="text-[11px] text-blue-500 hover:underline">ดูคำขอนัดรับของทั้งหมด &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Profile -->
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}" class="flex items-center space-x-2 hover:opacity-85 transition p-1.5 rounded-lg hover:bg-gray-50" title="ข้อมูลส่วนตัว">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" class="w-7 h-7 rounded-full object-cover ring-2 ring-blue-200">
+                            {% else %}
+                                <div class="w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-xs ring-2 ring-blue-200">
+                                    {{ user.first_name|default:user.username|make_list|first|upper }}
+                                </div>
+                            {% endif %}
+                            <div class="hidden sm:block text-left">
+                                <p class="text-sm font-semibold text-gray-800 leading-tight">{{ user.first_name|default:user.username }}</p>
+                                <p class="text-[11px] text-gray-400">{{ user.profile.student_id|default:user.username }}</p>
+                            </div>
+                        </a>
+                        <a href="{% url 'logout' %}" class="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition" title="ออกจากระบบ">
+                            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-blue-500 text-white text-xs font-bold hover:bg-blue-600 shadow-sm transition">
+                            <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
+                            <span>เข้าสู่ระบบ</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Mobile Nav -->
+            <div class="md:hidden border-t border-gray-100 px-4 py-1.5 flex items-center space-x-1 overflow-x-auto">
+                <a href="{% url 'item_list' %}" class="px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap {% if request.resolver_match.url_name == 'item_list' %}text-blue-600 bg-blue-50{% else %}text-gray-500{% endif %}">หน้าแรก</a>
+                <a href="{% url 'item_create' %}" class="px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap {% if request.resolver_match.url_name == 'item_create' %}text-blue-600 bg-blue-50{% else %}text-gray-500{% endif %}">ลงประกาศ</a>
+                <a href="{% url 'my_requests' %}" class="px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap {% if request.resolver_match.url_name == 'my_requests' %}text-blue-600 bg-blue-50{% else %}text-gray-500{% endif %}">นัดรับของ</a>
+                {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'dashboard' %}" class="px-3 py-1.5 text-xs font-medium rounded-lg whitespace-nowrap {% if request.resolver_match.url_name == 'dashboard' %}text-blue-600 bg-blue-50{% else %}text-gray-500{% endif %}">สถิติ</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 mt-3 space-y-1.5">
+                {% for message in messages %}
+                    <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-lg border text-sm {% if message.tags == 'error' %}bg-red-50 border-red-200 text-red-700{% elif message.tags == 'success' %}bg-green-50 border-green-200 text-green-700{% elif message.tags == 'warning' %}bg-yellow-50 border-yellow-200 text-yellow-700{% else %}bg-blue-50 border-blue-200 text-blue-700{% endif %}" role="alert">
+                        <span class="flex-shrink-0">
+                            {% if message.tags == 'error' %}<i class="fa-solid fa-circle-exclamation text-xs"></i>
+                            {% elif message.tags == 'success' %}<i class="fa-solid fa-circle-check text-xs"></i>
+                            {% elif message.tags == 'warning' %}<i class="fa-solid fa-triangle-exclamation text-xs"></i>
+                            {% else %}<i class="fa-solid fa-circle-info text-xs"></i>{% endif %}
+                        </span>
+                        <span class="flex-1">{{ message }}</span>
+                        <button type="button" onclick="this.parentElement.remove()" class="ml-auto opacity-50 hover:opacity-100">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto p-4 sm:p-6">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <script>
+        const notifBtn = document.getElementById('notification-bell-btn');
+        const notifPanel = document.getElementById('notification-panel');
+        const notifContainer = document.getElementById('notification-dropdown-container');
+        const markAllReadBtn = document.getElementById('mark-all-read-btn');
+        const notifBadge = document.getElementById('notification-badge');
+        if (notifBtn && notifPanel) {
+            notifBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notifPanel.classList.toggle('hidden');
+            });
+            document.addEventListener('click', (e) => {
+                if (notifContainer && !notifContainer.contains(e.target)) {
+                    notifPanel.classList.add('hidden');
+                }
+            });
+        }
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch("{% url 'mark_all_notifications_read' %}", {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+                    if (response.ok) {
+                        if (notifBadge) notifBadge.classList.add('hidden');
+                        markAllReadBtn.remove();
+                        document.querySelectorAll('#notification-items-list a').forEach(el => {
+                            el.classList.remove('bg-blue-50/40');
+                        });
+                    }
+                } catch (err) { console.error(err); }
+            });
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

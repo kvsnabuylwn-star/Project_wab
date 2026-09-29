@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>ข้อเสนอเค้าโครงโครงงาน (Class Project Proposal)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+  
+  body {
+    font-family: 'Sarabun', 'TH Sarabun New', Tahoma, sans-serif;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background-color: #f8fafc;
+    margin: 0;
+    padding: 24px;
+  }
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 48px 56px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    border-radius: 8px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  h2.sub {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    color: #111827;
+  }
+  .text-content {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  ol {
+    padding-left: 20px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+  }
+  li {
+    font-size: 15px;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-bottom: 28px;
+    font-size: 14px;
+  }
+  th, td {
+    border: 1px solid #1f2937;
+    padding: 8px 12px;
+  }
+  th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+    text-align: center;
+  }
+  td.center {
+    text-align: center;
+  }
+  @media print {
+    body {
+      background: #ffffff;
+      padding: 0;
+    }
+    .page {
+      box-shadow: none;
+      padding: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>ข้อเสนอเค้าโครงโครงงาน</h1>
+  <h2 class="sub">(Class Project Proposal)</h2>
+
+  <div class="section-title">ผู้พัฒนา</div>
+  <div class="text-content">1. xxxxxxxxxx (ใส่ชื่อ-นามสกุล และรหัสนักศึกษา)</div>
+
+  <div class="section-title">ชื่อโปรแกรม</div>
+  <div class="text-content"><strong>ส่งต่อของดีในสาขา (ICT UBU Share)</strong></div>
+
+  <div class="section-title">รายละเอียดฟังก์ชัน/ความสามารถของโปรแกรม</div>
+  <ol>
+    <li><strong>ระบบจัดการบัญชีผู้ใช้งาน (Authentication & Profile Management):</strong> สมัครสมาชิก, เข้าสู่ระบบ, ออกจากระบบ, เปลี่ยนรหัสผ่าน, รีเซ็ตรหัสผ่าน, จัดการข้อมูลโปรไฟล์นักศึกษา (รหัส นศ., ชั้นปี, รูปโปรไฟล์, แนะนำตัว, เบอร์โทร, Line ID) และปรับแต่งโหมดธีมสว่าง/มืด</li>
+    <li><strong>ระบบลงประกาศสิ่งของส่งต่อ (Item Management):</strong> สมาชิกสามารถลงประกาศสิ่งของส่งต่อ/แจกฟรี (ระบุชื่อของ, รายละเอียดสภาพ, ราคา หรือใส่ 0 เพื่อแจกฟรี, ช่องทางติดต่อ และรูปถ่ายสิ่งของ) พร้อมสิทธิ์แก้ไขหรือลบประกาศของตนเอง</li>
+    <li><strong>ระบบสืบค้นและคัดกรองสิ่งของ (Search & Filter):</strong> ค้นหาตามชื่อและรายละเอียด พร้อมคัดกรองตามสถานะ (พร้อมส่งต่อ / มีคนขอรับแล้ว / ส่งมอบสำเร็จ)</li>
+    <li><strong>ระบบแปลงช่องทางติดต่ออัตโนมัติ (Smart Contact Links):</strong> ตรวจจับเบอร์โทร, LINE, Facebook, IG, X, อีเมล และแปลงเป็นปุ่มคลิกเปิดติดต่อได้ทันที</li>
+    <li><strong>ระบบการขอนัดรับของ (Meetup & Claim Request):</strong> ผู้รับส่งคำขอนัดรับโดยเลือกจุดนัดรับใต้ตึกคณะ ICT (ลานกิจกรรม, หน้าห้องแล็บ CS, โรงอาหารกลาง ฯลฯ) ระบุวันที่นัดรับ และข้อความถึงผู้ให้ พร้อมปรับสถานะของเป็น 'มีคนขอรับแล้ว' อัตโนมัติ</li>
+    <li><strong>ระบบจัดการคำขอของฉันและยืนยันส่งมอบ (My Requests & Confirmation):</strong> ติดตามสถานะของที่ตนเองลงประกาศและของที่ขอรับ เจ้าของของสามารถกดยืนยันการส่งมอบสำเร็จเพื่อเปลี่ยนสถานะเป็น 'ส่งมอบสำเร็จ'</li>
+    <li><strong>ระบบความคิดเห็นและการตอบกลับ (Item Comments & Nested Replies):</strong> สมาชิกสามารถถาม-ตอบรายละเอียดสิ่งของใต้ประกาศ และสามารถตอบกลับความคิดเห็น (Nested Replies) ได้</li>
+    <li><strong>ระบบการแจ้งเตือน (Notifications System):</strong> แจ้งเตือนเมื่อมีคำขอนัดรับใหม่, เมื่อเจ้าของยืนยันการส่งมอบสำเร็จ, และเมื่อมีความคิดเห็นหรือการตอบกลับใหม่ พร้อมจุดแจ้งเตือนบนไอคอนกระดิ่ง</li>
+    <li><strong>ระบบแดชบอร์ดสรุปสถิติภาพรวม (Admin Analytics Dashboard):</strong> สรุปตัวเลขสถิติสิ่งของทั้งหมด, ของพร้อมส่งต่อ, ของที่มีคนขอรับ, ของที่ส่งมอบสำเร็จ และสัดส่วนของแจกฟรีเทียบกับของมีราคา สำหรับผู้ดูแลระบบ</li>
+  </ol>
+
+  <div class="section-title">โมเดลข้อมูล/ตารางฐานข้อมูล</div>
+
+  <div style="font-weight: 600; margin-top: 14px;">โมเดล/ตาราง 1: Item (สิ่งของสำหรับส่งต่อ)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">ชื่อฟิลด์</th>
+        <th style="width: 32%;">ความหมาย</th>
+        <th style="width: 25%;">ชนิด/ความยาว</th>
+        <th style="width: 15%;">หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>id</td><td>รหัสสิ่งของ</td><td class="center">AutoField (PK)</td><td class="center">อัตโนมัติ</td></tr>
+      <tr><td>owner (FK:User)</td><td>ผู้ลงประกาศสิ่งของ</td><td class="center">ForeignKey (User)</td><td class="center">เชื่อมโยง User</td></tr>
+      <tr><td>title</td><td>ชื่อสิ่งของ</td><td class="center">CharField (200)</td><td class="center"></td></tr>
+      <tr><td>price</td><td>ราคา (0 = แจกฟรี)</td><td class="center">DecimalField (7, 2)</td><td class="center">ค่าเริ่มต้น 0</td></tr>
+      <tr><td>contact_link</td><td>ลิงก์ช่องทางติดต่อ</td><td class="center">CharField (300)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>image</td><td>รูปภาพประกอบสิ่งของ</td><td class="center">ImageField</td><td class="center">ว่างได้</td></tr>
+      <tr><td>description</td><td>รายละเอียดสภาพของ/โน้ต</td><td class="center">TextField</td><td class="center"></td></tr>
+      <tr><td>status</td><td>สถานะของสิ่งของ</td><td class="center">CharField (20)</td><td class="center">ค่าเริ่มต้น 'available'</td></tr>
+      <tr><td>created_at</td><td>วันเวลาที่ลงประกาศ</td><td class="center">DateTimeField</td><td class="center">อัตโนมัติ</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-weight: 600; margin-top: 14px;">โมเดล/ตาราง 2: ClaimRequest (การขอนัดรับของ)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">ชื่อฟิลด์</th>
+        <th style="width: 32%;">ความหมาย</th>
+        <th style="width: 25%;">ชนิด/ความยาว</th>
+        <th style="width: 15%;">หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>id</td><td>รหัสคำขอนัดรับ</td><td class="center">AutoField (PK)</td><td class="center">อัตโนมัติ</td></tr>
+      <tr><td>item (FK:Item)</td><td>สิ่งของที่ขอรับ</td><td class="center">ForeignKey (Item)</td><td class="center">เชื่อมโยง Item</td></tr>
+      <tr><td>requester (FK:User)</td><td>ผู้ขอรับสิ่งของ</td><td class="center">ForeignKey (User)</td><td class="center">เชื่อมโยง User</td></tr>
+      <tr><td>pickup_place</td><td>จุดนัดรับใต้ตึกสาขา</td><td class="center">CharField (150)</td><td class="center">ตัวเลือกจุดนัดรับ</td></tr>
+      <tr><td>meetup_date</td><td>วันที่นัดรับของ</td><td class="center">DateField</td><td class="center"></td></tr>
+      <tr><td>note</td><td>ข้อความถึงเจ้าของ/ผู้ให้</td><td class="center">TextField</td><td class="center">ว่างได้</td></tr>
+      <tr><td>is_confirmed</td><td>เจ้าของยืนยันส่งมอบสำเร็จ</td><td class="center">BooleanField</td><td class="center">ค่าเริ่มต้น False</td></tr>
+      <tr><td>created_at</td><td>วันเวลาที่ส่งคำขอ</td><td class="center">DateTimeField</td><td class="center">อัตโนมัติ</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-weight: 600; margin-top: 14px;">โมเดล/ตาราง 3: Comment (ความคิดเห็น/ถาม-ตอบ)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">ชื่อฟิลด์</th>
+        <th style="width: 32%;">ความหมาย</th>
+        <th style="width: 25%;">ชนิด/ความยาว</th>
+        <th style="width: 15%;">หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>id</td><td>รหัสความคิดเห็น</td><td class="center">AutoField (PK)</td><td class="center">อัตโนมัติ</td></tr>
+      <tr><td>item (FK:Item)</td><td>สิ่งของที่แสดงความคิดเห็น</td><td class="center">ForeignKey (Item)</td><td class="center">เชื่อมโยง Item</td></tr>
+      <tr><td>author (FK:User)</td><td>ผู้แสดงความคิดเห็น</td><td class="center">ForeignKey (User)</td><td class="center">เชื่อมโยง User</td></tr>
+      <tr><td>parent (FK:Comment)</td><td>ความคิดเห็นหลักที่ตอบกลับ</td><td class="center">ForeignKey (Self)</td><td class="center">ว่างได้ (Nested Reply)</td></tr>
+      <tr><td>content</td><td>ข้อความความคิดเห็น</td><td class="center">TextField</td><td class="center"></td></tr>
+      <tr><td>created_at</td><td>วันเวลาที่แสดงความคิดเห็น</td><td class="center">DateTimeField</td><td class="center">อัตโนมัติ</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-weight: 600; margin-top: 14px;">โมเดล/ตาราง 4: Notification (การแจ้งเตือนในระบบ)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">ชื่อฟิลด์</th>
+        <th style="width: 32%;">ความหมาย</th>
+        <th style="width: 25%;">ชนิด/ความยาว</th>
+        <th style="width: 15%;">หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>id</td><td>รหัสการแจ้งเตือน</td><td class="center">AutoField (PK)</td><td class="center">อัตโนมัติ</td></tr>
+      <tr><td>recipient (FK:User)</td><td>ผู้รับการแจ้งเตือน</td><td class="center">ForeignKey (User)</td><td class="center">เชื่อมโยง User</td></tr>
+      <tr><td>sender (FK:User)</td><td>ผู้ส่งการแจ้งเตือน</td><td class="center">ForeignKey (User)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>item (FK:Item)</td><td>สิ่งของที่เกี่ยวข้อง</td><td class="center">ForeignKey (Item)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>claim (FK:ClaimRequest)</td><td>คำขอนัดรับที่เกี่ยวข้อง</td><td class="center">ForeignKey (ClaimRequest)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>comment (FK:Comment)</td><td>ความคิดเห็นที่เกี่ยวข้อง</td><td class="center">ForeignKey (Comment)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>notification_type</td><td>ประเภทการแจ้งเตือน</td><td class="center">CharField (50)</td><td class="center">เช่น claim_new ฯลฯ</td></tr>
+      <tr><td>title</td><td>หัวข้อการแจ้งเตือน</td><td class="center">CharField (200)</td><td class="center"></td></tr>
+      <tr><td>message</td><td>ข้อความแจ้งเตือน</td><td class="center">TextField</td><td class="center"></td></tr>
+      <tr><td>is_read</td><td>สถานะการอ่าน</td><td class="center">BooleanField</td><td class="center">ค่าเริ่มต้น False</td></tr>
+      <tr><td>created_at</td><td>วันเวลาที่แจ้งเตือน</td><td class="center">DateTimeField</td><td class="center">อัตโนมัติ</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-weight: 600; margin-top: 14px;">โมเดล/ตาราง 5: UserProfile (ข้อมูลโปรไฟล์นักศึกษาและการตั้งค่า)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">ชื่อฟิลด์</th>
+        <th style="width: 32%;">ความหมาย</th>
+        <th style="width: 25%;">ชนิด/ความยาว</th>
+        <th style="width: 15%;">หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>id</td><td>รหัสโปรไฟล์</td><td class="center">AutoField (PK)</td><td class="center">อัตโนมัติ</td></tr>
+      <tr><td>user (OneToOne:User)</td><td>บัญชีผู้ใช้งานระบบ</td><td class="center">OneToOneField (User)</td><td class="center">เชื่อม 1:1 กับ User</td></tr>
+      <tr><td>student_id</td><td>รหัสนักศึกษา</td><td class="center">CharField (20)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>year_level</td><td>ชั้นปี (1 - 4)</td><td class="center">IntegerField</td><td class="center">ค่าเริ่มต้น 2</td></tr>
+      <tr><td>phone_number</td><td>เบอร์โทรศัพท์</td><td class="center">CharField (20)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>line_id</td><td>LINE ID</td><td class="center">CharField (50)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>bio</td><td>คำแนะนำตัวสั้นๆ</td><td class="center">TextField</td><td class="center">ว่างได้</td></tr>
+      <tr><td>avatar</td><td>รูปโปรไฟล์</td><td class="center">ImageField</td><td class="center">ว่างได้</td></tr>
+      <tr><td>theme_mode</td><td>โหมดธีม (Light/Dark)</td><td class="center">CharField (20)</td><td class="center">ค่าเริ่มต้น 'light'</td></tr>
+      <tr><td>accent_color</td><td>สีธีมหลักของระบบ</td><td class="center">CharField (20)</td><td class="center">ค่าเริ่มต้น 'blue'</td></tr>
+      <tr><td>notify_email</td><td>รับแจ้งเตือนทางอีเมล</td><td class="center">BooleanField</td><td class="center">ค่าเริ่มต้น True</td></tr>
+      <tr><td>show_contact_publicly</td><td>แสดงข้อมูลติดต่อสาธารณะ</td><td class="center">BooleanField</td><td class="center">ค่าเริ่มต้น True</td></tr>
+    </tbody>
+  </table>
+
+  <div style="font-weight: 600; margin-top: 14px;">โมเดล/ตาราง 6: User (auth_user - บัญชีผู้ใช้งานระบบหลัก)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">ชื่อฟิลด์</th>
+        <th style="width: 32%;">ความหมาย</th>
+        <th style="width: 25%;">ชนิด/ความยาว</th>
+        <th style="width: 15%;">หมายเหตุ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>id</td><td>รหัสผู้ใช้งาน</td><td class="center">AutoField (PK)</td><td class="center">อัตโนมัติ</td></tr>
+      <tr><td>username</td><td>ชื่อผู้ใช้สำหรับล็อกอิน</td><td class="center">CharField (150)</td><td class="center">ไม่ซ้ำกัน (Unique)</td></tr>
+      <tr><td>password</td><td>รหัสผ่านที่เข้ารหัสแล้ว</td><td class="center">CharField (128)</td><td class="center">Password Hash</td></tr>
+      <tr><td>first_name</td><td>ชื่อจริง</td><td class="center">CharField (150)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>last_name</td><td>นามสกุล</td><td class="center">CharField (150)</td><td class="center">ว่างได้</td></tr>
+      <tr><td>email</td><td>ที่อยู่อีเมล</td><td class="center">EmailField (254)</td><td class="center"></td></tr>
+      <tr><td>is_staff</td><td>สิทธิ์เจ้าหน้าที่/ผู้ดูแล</td><td class="center">BooleanField</td><td class="center">ดูหน้าสถิติได้</td></tr>
+      <tr><td>is_active</td><td>สถานะเปิดใช้งานบัญชี</td><td class="center">BooleanField</td><td class="center">ค่าเริ่มต้น True</td></tr>
+      <tr><td>date_joined</td><td>วันเวลาที่สมัครสมาชิก</td><td class="center">DateTimeField</td><td class="center">อัตโนมัติ</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

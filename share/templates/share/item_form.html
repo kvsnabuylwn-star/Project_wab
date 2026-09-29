@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action_title }} - CS Dept Next{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto pb-8">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center text-xs text-gray-400 mb-5 space-x-1.5">
+        <a href="{% url 'item_list' %}" class="hover:text-gray-600 transition">หน้าแรก</a>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        {% if is_edit %}
+            <a href="{% url 'item_detail' pk=item.pk %}" class="hover:text-gray-600 transition">{{ item.title|truncatechars:20 }}</a>
+            <i class="fa-solid fa-chevron-right text-[8px]"></i>
+            <span class="text-gray-600">แก้ไข</span>
+        {% else %}
+            <span class="text-gray-600">ลงประกาศใหม่</span>
+        {% endif %}
+    </nav>
+
+    <!-- Page Title -->
+    <div class="mb-6">
+        <h1 class="text-xl font-bold text-gray-800 leading-tight">
+            {% if is_edit %}
+                แก้ไขประกาศ
+            {% else %}
+                ลงประกาศส่งต่อ
+            {% endif %}
+        </h1>
+        <p class="text-sm text-gray-400 mt-1">
+            {% if is_edit %}
+                อัปเดตรายละเอียดของ "{{ item.title }}"
+            {% else %}
+                กรอกข้อมูลสิ่งของที่อยากส่งต่อให้เพื่อนในสาขา
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Non-field Errors -->
+        {% if form.non_field_errors %}
+            <div class="mb-5 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Section 1: ข้อมูลหลัก -->
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4 shadow-sm">
+            <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-200">
+                <h2 class="text-sm font-semibold text-gray-700">ข้อมูลสิ่งของ</h2>
+            </div>
+            <div class="p-5 space-y-5">
+
+                <!-- ชื่อสิ่งของ -->
+                <div>
+                    <label for="{{ form.title.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        ชื่อสิ่งของ <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <p class="text-xs text-red-500 mt-1">{{ form.title.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+
+                <!-- ราคา + ปุ่มฟรี -->
+                <div>
+                    <label for="{{ form.price.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        ราคา (บาท) <span class="text-red-400">*</span>
+                    </label>
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex-1 max-w-[200px]">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 text-sm pointer-events-none">฿</span>
+                            <div class="[&>input]:!pl-8">
+                                {{ form.price }}
+                            </div>
+                        </div>
+                        <button type="button"
+                                id="btn-free-action"
+                                data-keep-color
+                                class="px-3 py-2 rounded-lg text-xs font-semibold bg-green-50 text-green-600 border border-green-200 hover:bg-green-100 transition active:scale-95"
+                                title="ตั้งราคาเป็น 0 (ส่งต่อฟรี)">
+                            ส่งต่อฟรี
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-1.5">ใส่ 0 หรือกดปุ่ม "ส่งต่อฟรี" ถ้าอยากแจกให้เลย</p>
+                    {% if form.price.errors %}
+                        <p class="text-xs text-red-500 mt-1">{{ form.price.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- รายละเอียด -->
+                <div>
+                    <label for="{{ form.description.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                        รายละเอียดสภาพของ <span class="text-red-400">*</span>
+                    </label>
+                    {{ form.description }}
+                    <p class="text-[11px] text-gray-400 mt-1.5">บอกสภาพ ตำหนิ หรือข้อมูลเพิ่มเติมที่อยากให้ผู้รับรู้</p>
+                    {% if form.description.errors %}
+                        <p class="text-xs text-red-500 mt-1">{{ form.description.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Section 2: รูปภาพ -->
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-4 shadow-sm">
+            <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-200">
+                <h2 class="text-sm font-semibold text-gray-700">รูปภาพ</h2>
+            </div>
+            <div class="p-5">
+
+                {% if is_edit and item.image %}
+                    <div class="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-14 h-14 object-cover rounded-lg flex-shrink-0">
+                        <div class="min-w-0">
+                            <p class="text-xs font-medium text-gray-700">รูปปัจจุบัน</p>
+                            <p class="text-[11px] text-gray-400 truncate">{{ item.image.name }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Drag & Drop Zone -->
+                <div id="drop-zone"
+                     class="relative border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-blue-400 transition-colors cursor-pointer group"
+                     onclick="document.getElementById('{{ form.image.id_for_label }}').click()">
+                    <div id="preview-container" class="hidden mb-3 flex justify-center">
+                        <img id="preview-image" src="" alt="preview" class="max-h-36 rounded-lg object-contain">
+                    </div>
+                    <div id="upload-placeholder">
+                        <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:text-blue-500 transition-colors">
+                            <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+                        </div>
+                        <p class="text-sm text-gray-500">
+                            <span class="text-blue-500 font-medium">เลือกไฟล์</span> หรือลากรูปมาวางที่นี่
+                        </p>
+                        <p class="text-[11px] text-gray-400 mt-1">JPG, PNG, WEBP</p>
+                    </div>
+                    <div class="absolute inset-0 opacity-0">
+                        {{ form.image }}
+                    </div>
+                </div>
+
+                {% if form.image.errors %}
+                    <p class="text-xs text-red-500 mt-2">{{ form.image.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Section 3: ช่องทางติดต่อ -->
+        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6 shadow-sm">
+            <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-sm font-semibold text-gray-700">ช่องทางติดต่อ</h2>
+                <span class="text-[10px] text-gray-400 font-medium">ไม่บังคับ</span>
+            </div>
+            <div class="p-5">
+                <label for="{{ form.contact_link.id_for_label }}" class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                    ลิงก์ Line / Facebook / IG
+                </label>
+                {{ form.contact_link }}
+                <p class="text-[11px] text-gray-400 mt-1.5">ลิงก์เผื่อคนอยากทักแชทสอบถามก่อนขอรับ</p>
+                {% if form.contact_link.errors %}
+                    <p class="text-xs text-red-500 mt-1">{{ form.contact_link.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-between">
+            <a href="{% if is_edit %}{% url 'item_detail' pk=item.pk %}{% else %}{% url 'item_list' %}{% endif %}"
+               class="text-sm text-gray-400 hover:text-gray-600 transition">
+                <i class="fa-solid fa-arrow-left mr-1 text-xs"></i>ยกเลิก
+            </a>
+            <button type="submit"
+                    class="px-5 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold shadow-sm transition active:scale-[0.97]">
+                {% if is_edit %}
+                    บันทึกการแก้ไข
+                {% else %}
+                    ลงประกาศ
+                {% endif %}
+            </button>
+        </div>
+    </form>
+
+</div>
+
+<!-- Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const priceInput = document.getElementById('{{ form.price.id_for_label }}');
+    const btnFree = document.getElementById('btn-free-action');
+
+    if (btnFree && priceInput) {
+        btnFree.addEventListener('click', () => {
+            priceInput.value = '0';
+            priceInput.focus();
+        });
+    }
+
+    // Image preview
+    const fileInput = document.getElementById('{{ form.image.id_for_label }}');
+    const previewContainer = document.getElementById('preview-container');
+    const previewImage = document.getElementById('preview-image');
+    const uploadPlaceholder = document.getElementById('upload-placeholder');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    previewImage.src = ev.target.result;
+                    previewContainer.classList.remove('hidden');
+                    previewContainer.classList.add('flex');
+                    uploadPlaceholder.innerHTML = '<p class="text-xs text-gray-500 mt-1">' + file.name + '</p>';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Drag and drop
+    const dropZone = document.getElementById('drop-zone');
+    if (dropZone && fileInput) {
+        ['dragenter', 'dragover'].forEach(ev => {
+            dropZone.addEventListener(ev, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-blue-400', 'bg-blue-50/30');
+            });
+        });
+        ['dragleave', 'drop'].forEach(ev => {
+            dropZone.addEventListener(ev, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-blue-400', 'bg-blue-50/30');
+            });
+        });
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            if (dt.files.length > 0) {
+                fileInput.files = dt.files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

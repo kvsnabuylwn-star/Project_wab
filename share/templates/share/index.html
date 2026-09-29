@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ICT UBU Next: ส่งต่อของดีในสาขา{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+
+    <!-- Hero Banner with Background Image -->
+    <div class="relative text-white rounded-2xl p-6 sm:p-8 flex items-center justify-between gap-6 shadow-md overflow-hidden min-h-[190px]">
+        <!-- Background Banner Image -->
+        <img src="{% static 'images/banner.png' %}" alt="Banner" class="absolute inset-0 w-full h-full object-cover object-[center_35%] pointer-events-none">
+        <!-- Soft gradient overlay so text remains readable while keeping the image vibrant -->
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-950/75 via-blue-900/40 to-blue-950/20 pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold mb-3 border border-white/25 shadow-sm">
+                <i class="fa-solid fa-sparkles text-xs"></i> ชุมชนแห่งการแบ่งปัน ICT UBU
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 tracking-tight text-white drop-shadow-md">ส่งต่อของดี ในสาขาเรา</h2>
+            <a href="{% url 'item_create' %}" class="inline-flex items-center px-4 py-2.5 rounded-lg bg-white text-blue-600 hover:bg-blue-50 text-sm font-bold shadow-md transition active:scale-95">
+                ลงประกาศส่งต่อ <i class="fa-solid fa-plus ml-2 text-xs"></i>
+            </a>
+        </div>
+        <div class="hidden sm:block flex-shrink-0 relative z-10">
+            <img src="{% static 'images/logo_ict_ubu.png' %}" alt="ICT UBU" class="w-24 h-24 object-contain bg-white/30 rounded-2xl p-2.5 backdrop-blur-md border border-white/30 shadow-lg">
+        </div>
+    </div>
+
+    <!-- ประกาศล่าสุด -->
+    <div>
+        <div class="flex items-center justify-between mb-3.5">
+            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                <span class="w-1.5 h-5 bg-blue-500 rounded-full inline-block"></span>
+                ประกาศล่าสุด
+            </h3>
+            <a href="{% url 'item_list' %}" class="text-xs text-blue-500 hover:underline font-semibold flex items-center gap-1">
+                <span>ดูทั้งหมด</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
+            {% if items %}
+                {% for item in items %}
+                    <a href="{% url 'item_detail' item.pk %}" class="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-blue-400 shadow-sm hover:shadow-md transition-all duration-200">
+                            
+                            <!-- รูป -->
+                            <div class="aspect-[4/3] bg-gray-100 overflow-hidden relative border-b border-gray-100">
+                                {% if item.image %}
+                                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-300">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                        <i class="fa-solid fa-box-open text-3xl"></i>
+                                    </div>
+                                {% endif %}
+
+                                {% if item.is_free or item.price == 0 %}
+                                    <span class="absolute top-2 left-2 text-[10px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-md shadow-sm">ฟรี</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- ข้อมูล -->
+                            <div class="p-3">
+                                <h4 class="text-sm font-semibold text-gray-800 line-clamp-1 mb-1 group-hover:text-blue-600 transition-colors">{{ item.title }}</h4>
+                                <p class="text-xs text-gray-400 line-clamp-1 mb-2">{{ item.description|default:"พร้อมส่งต่อ" }}</p>
+                                <div class="flex items-center justify-between pt-1 border-t border-gray-100">
+                                    {% if item.is_free or item.price == 0 %}
+                                        <span class="text-sm font-bold text-blue-600">ฟรี</span>
+                                    {% else %}
+                                        <span class="text-sm font-bold text-gray-800">฿{{ item.price }}</span>
+                                    {% endif %}
+                                    <span class="text-[10px] font-medium text-gray-400 truncate max-w-[80px]">{{ item.owner.first_name|default:item.owner.username }}</span>
+                                </div>
+                            </div>
+
+                        </a>
+                {% endfor %}
+            {% else %}
+                <div class="col-span-full text-center py-10 bg-white rounded-xl border border-gray-200 text-sm text-gray-400 shadow-sm">
+                    <i class="fa-solid fa-box-open text-3xl text-gray-300 mb-2 block"></i>
+                    ยังไม่มีรายการสิ่งของ
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

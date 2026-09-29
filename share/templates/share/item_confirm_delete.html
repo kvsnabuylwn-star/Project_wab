@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}ยืนยันการลบประกาศ - CS Dept Next{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto pb-8">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center text-xs text-gray-400 mb-5 space-x-1.5">
+        <a href="{% url 'item_list' %}" class="hover:text-gray-600 transition">หน้าแรก</a>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <a href="{% url 'item_detail' pk=item.pk %}" class="hover:text-gray-600 transition">{{ item.title|truncatechars:20 }}</a>
+        <i class="fa-solid fa-chevron-right text-[8px]"></i>
+        <span class="text-gray-600">ยืนยันการลบ</span>
+    </nav>
+
+    <!-- Confirmation Card -->
+    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+        <!-- Card Header -->
+        <div class="px-5 py-3.5 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+            <h1 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                ยืนยันการลบประกาศ
+            </h1>
+            <span class="text-[11px] text-gray-400">ID: #{{ item.pk }}</span>
+        </div>
+
+        <div class="p-6 space-y-5">
+            <!-- Warning Notice -->
+            <div class="flex items-start gap-3 p-3.5 bg-red-50 border border-red-200/80 rounded-lg text-xs text-red-700">
+                <i class="fa-solid fa-circle-exclamation text-red-500 mt-0.5 text-sm flex-shrink-0"></i>
+                <div class="leading-relaxed">
+                    <p class="font-semibold text-red-800">การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                    <p class="mt-0.5 text-red-600">
+                        คุณกำลังจะลบประกาศนี้ออกจากระบบอย่างถาวร ข้อมูลและประวัติการพูดคุยจะถูกลบทั้งหมด
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item Preview Card -->
+            <div>
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">สิ่งของที่จะถูกลบ</p>
+                <div class="flex items-center gap-4 p-3.5 rounded-lg border border-gray-200 bg-gray-50/60">
+                    <!-- Thumbnail -->
+                    <div class="w-16 h-16 rounded-md overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200 flex items-center justify-center">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <i class="fa-solid fa-box-open text-gray-400 text-lg"></i>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details -->
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-sm font-bold text-gray-800 truncate mb-1">{{ item.title }}</h2>
+                        <div class="flex items-center gap-2 text-xs">
+                            {% if item.is_free %}
+                                <span class="font-semibold text-green-600">ฟรี</span>
+                            {% else %}
+                                <span class="font-semibold text-gray-800">฿{{ item.price }}</span>
+                            {% endif %}
+                            <span class="text-gray-300">•</span>
+                            <span class="text-gray-400">ลงเมื่อ {{ item.created_at|date:"d M Y" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <form method="POST" class="pt-2 flex items-center justify-end gap-2.5">
+                {% csrf_token %}
+                <a href="{% url 'item_detail' pk=item.pk %}"
+                   class="px-4 py-2 border border-gray-300 rounded-lg text-xs font-medium text-gray-700 hover:bg-gray-50 transition">
+                    ยกเลิก
+                </a>
+                <button type="submit"
+                        class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-sm transition active:scale-95 flex items-center gap-1.5">
+                    <i class="fa-solid fa-trash text-[11px]"></i>
+                    ลบประกาศนี้ถาวร
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
